@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\VoosServices;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class VoosController extends Controller
@@ -18,5 +17,15 @@ class VoosController extends Controller
     public function voos()
     {
         return response($this->voosServices->getVoos(), Response::HTTP_OK);
+    }
+
+    public function voosOutbound()
+    {
+        return response($this->voosServices->getVoosOutbound(), Response::HTTP_OK);
+    }
+
+    public function voosInbound()
+    {
+        return response($this->voosServices->getVoosInbound(), Response::HTTP_OK);
     }
 }

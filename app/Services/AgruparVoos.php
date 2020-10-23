@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Service\Milhas123;
+use App\Services\Milhas123;
 
 class AgruparVoos
 {
@@ -75,7 +75,7 @@ class AgruparVoos
     {
         $menorPreco = $this->ordenarPorPreco()->first();
         $this->grupos['totalGroups'] = count($this->grupos['groups']);
-        $this->grupos['totalFlights'] = $this->totalVoosUnicos();
+        $this->grupos['totalSingleFlights'] = $this->totalVoosUnicos();
         $this->grupos['cheapestPrice'] = $menorPreco['totalPrice'];
         $this->grupos['cheapestGroup'] = $menorPreco['uniqueId'];
     }
