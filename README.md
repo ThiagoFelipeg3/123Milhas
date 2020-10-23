@@ -11,6 +11,8 @@
 
 Esta API é um teste proposto pela empresa [123 Milhas](https://123milhas.com/);
 
+Basicamente oque ela faz, é tratar os dados retornados pela api disponibilizada, organizando os voos de idas e voltas de acordo com o mesmo tipo de tarifa.
+
 ## Rodar o projeto local
 
 Este projeto esta utilizando o [Docker](https://www.docker.com/get-started) e o Docker Compose, você pode acessar a página e seguir os passos de instalação.
@@ -57,3 +59,21 @@ $  docker-compose exec app bash
 $ composer install
 ```
 
+## Rotas
+
+Após tudo isso, acesse no seu navegador ou em alguma ferramenta como o Postmon as seguntes rotas;
+
+Retornar todos os voos agrupados por tarifa preco:
+```
+GET http://localhost/api/flights
+```
+
+Retornar todos os voos somente de ida:
+```
+GET http://localhost/api/flights/outbound
+```
+
+Retornar todos os voos somente volta:
+```
+GET http://localhost/api/flights/inbound
+```
