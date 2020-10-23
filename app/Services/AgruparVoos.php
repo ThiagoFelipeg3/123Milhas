@@ -14,10 +14,10 @@ class AgruparVoos
     public function __construct(Milhas123 $milhas)
     {
         $this->milhas = $milhas;
-        $this->grupos = [];
+        $this->grupos ['groups'] = [];
     }
 
-    public function agruparVoos()
+    public function voosAgrupados()
     {
         $voos = $this->milhas->getFlights();
         $this->grupos['flights'] = $voos;
@@ -30,8 +30,7 @@ class AgruparVoos
             $this->agruparPrecos($tarifa->toArray());
         }
 
-        $this->criarGrupos();
-        return $this->grupos;
+       return $this->criarGrupos();
     }
 
     private function agruparPrecos(array $voos)
@@ -56,7 +55,7 @@ class AgruparVoos
         }
     }
 
-    private function criarGrupos()
+    private function criarGrupos(): array
     {
         foreach($this->inbound as $keyIn => $in) {
             foreach($this->outbound as $keyOut => $out){
@@ -68,15 +67,22 @@ class AgruparVoos
         }
 
         $this->informacoesExtras();
+        $this->grupos['groups'] = $this->ordenarPorPreco()->values();
+        return $this->grupos;
     }
 
     private function informacoesExtras()
     {
-        $grupoMenorPreco = collect($this->grupos['groups'])->sortBy('price')->all();
+        $menorPreco = $this->ordenarPorPreco()->first();
         $this->grupos['totalGroups'] = count($this->grupos['groups']);
         $this->grupos['totalFlights'] = $this->totalVoosUnicos();
-        $this->grupos['cheapestPrice'] = $grupoMenorPreco[0]['totalPrice'];
-        $this->grupos['cheapestGroup'] = $grupoMenorPreco[0]['uniqueId'];
+        $this->grupos['cheapestPrice'] = $menorPreco['totalPrice'];
+        $this->grupos['cheapestGroup'] = $menorPreco['uniqueId'];
+    }
+
+    private function ordenarPorPreco()
+    {
+        return collect($this->grupos['groups'])->sortBy('totalPrice');
     }
 
     private function totalVoosUnicos()
@@ -100,7 +106,7 @@ class AgruparVoos
         }
     }
 
-    public function somarValor($in, $out)
+    private function somarValor($in, $out)
     {
         $inOut = array_merge($in, $out);
         return array_reduce($inOut, function ($acumulador, $item) {
