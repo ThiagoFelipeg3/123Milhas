@@ -20,6 +20,7 @@ class AgruparVoos
     public function agruparVoos()
     {
         $voos = $this->milhas->getFlights();
+        $this->grupos['flights'] = $voos;
 
         $tarifaAgrupada = collect($voos)->mapToGroups(function ($item) {
             return [$item['fare'] => $item];
@@ -65,6 +66,24 @@ class AgruparVoos
                 }
             }
         }
+
+        $this->informacoesExtras();
+    }
+
+    private function informacoesExtras()
+    {
+        $grupoMenorPreco = collect($this->grupos['groups'])->sortBy('price')->all();
+        $this->grupos['totalGroups'] = count($this->grupos['groups']);
+        $this->grupos['totalFlights'] = $this->totalVoosUnicos();
+        $this->grupos['cheapestPrice'] = $grupoMenorPreco[0]['totalPrice'];
+        $this->grupos['cheapestGroup'] = $grupoMenorPreco[0]['uniqueId'];
+    }
+
+    private function totalVoosUnicos()
+    {
+        return collect($this->grupos['groups'])->filter(function($value) {
+            return count($value['outbound']) == 1 && count($value['inbound']) == 1;
+        })->count();
     }
 
     private function destinos($inbound, $outbound)
